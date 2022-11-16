@@ -1,4 +1,4 @@
 const HomePage = () => {
-    return <p>Homepage</p>
+  return <p className={'toto'}>Homepage</p>
 }
 export default HomePage
