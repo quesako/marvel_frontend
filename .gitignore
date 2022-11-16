@@ -2,7 +2,8 @@
 
 # ide
 .idea
-.idea/**/workspace.xml
+.idea/workspace.xml
+
 
 # dependencies
 /node_modules
