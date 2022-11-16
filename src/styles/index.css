@@ -11,10 +11,10 @@
 
     /*background colors*/
     .bg-body{
-        @apply text-zinc-100
+        @apply bg-zinc-100
     }
     .bg-body-inverted{
-        @apply text-zinc-900
+        @apply bg-zinc-800
     }
 
     /*text colors*/
