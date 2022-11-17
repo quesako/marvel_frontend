@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom'
+
 const TopBar = () => {
     return (
-        <>
-            <div className={'bg-body-inverted  border-b border-zinc-700'}>
+        <div className={'fixed top-0 z-50 w-full'}>
+            <div className={'bg-body-inverted border-b border-zinc-700'}>
                 <div className={'container flex'}>
                     {/* left nav*/}
                     <div
@@ -20,7 +22,8 @@ const TopBar = () => {
                         </div>
                     </div>
                     {/*Marvel logo*/}
-                    <div
+                    <Link
+                        to={`/`}
                         className={
                             'color-body-inverted flex h-[3.25rem] flex-1 items-center justify-center'
                         }
@@ -45,7 +48,7 @@ const TopBar = () => {
                                 d="M31.5 48V4H21.291l-3.64 22.735L14.102 4H4v44h8V26.792L15.577 48h4.229l3.568-21.208V48z"
                             ></path>
                         </svg>
-                    </div>
+                    </Link>
                     {/*right nav*/}
                     <div
                         className={
@@ -68,7 +71,6 @@ const TopBar = () => {
                     </div>
                 </div>
             </div>
-
             <div className={'bg-body-inverted  border-b border-zinc-700'}>
                 <div className={'container flex '}>
                     {/* left nav*/}
@@ -77,8 +79,8 @@ const TopBar = () => {
                             'color-body-inverted flex h-[3.25rem] w-full items-center justify-center'
                         }
                     >
-                        <a
-                            href={'#toto'}
+                        <Link
+                            to={`/comics`}
                             className={
                                 'group relative mx-4 flex h-full  items-center'
                             }
@@ -95,9 +97,9 @@ const TopBar = () => {
                                     'absolute -bottom-[1px] left-1/2 h-[4px] w-0 bg-transparent transition-all group-hover:left-0 group-hover:w-full group-hover:bg-red-500'
                                 }
                             ></span>
-                        </a>
-                        <a
-                            href={'#toto'}
+                        </Link>
+                        <Link
+                            to={`/characters`}
                             className={
                                 'group relative mx-4 flex h-full  items-center'
                             }
@@ -114,11 +116,11 @@ const TopBar = () => {
                                     'absolute -bottom-[1px] left-1/2 h-[4px] w-0 bg-transparent transition-all group-hover:left-0 group-hover:w-full group-hover:bg-red-500'
                                 }
                             ></span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 export default TopBar
