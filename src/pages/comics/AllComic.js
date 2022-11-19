@@ -1,13 +1,13 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
+import { useEffect, useState } from 'react'
 
 import ComicsList from '../../components/ComicsList'
 import Loader from '../../components/Loader'
 import Pagination from '../../components/Pagination'
 
 const AllComics = () => {
-    const [data, setData] = useState()
+    const [allComicsData, setAllComicsData] = useState()
     const [isFirstLoading, setIsFirstLoading] = useState(true)
     const [isShowing, setIsShowing] = useState(false)
 
@@ -29,12 +29,14 @@ const AllComics = () => {
             }
 
             try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_API_MARVEL}/comics?limit=${recordsPerPage}&skip=${skipValue}`
+                const allComics = await axios.get(
+                    `${process.env.REACT_APP_API_MARVEL}/allComics?limit=${recordsPerPage}&skip=${skipValue}`
                 )
+                // force scroll top
+                window.scrollTo(0, 0)
 
-                setData(response.data)
-
+                // set states
+                setAllComicsData(allComics.data)
                 setIsFirstLoading(false)
                 setIsShowing(true)
             } catch (error) {
@@ -45,19 +47,30 @@ const AllComics = () => {
     }, [currentPage])
 
     return (
-        <div>
+        <>
             {!isFirstLoading ? (
-                <>
+                <div className={'relative my-48 '}>
                     <Transition
+                        as="div"
+                        className={'relative'}
                         show={isShowing}
-                        enter="transition-opacity transition-transform  duration-100"
-                        enterFrom="opacity-0  translate-y-[100px]"
+                        enter="transition-opacity transition-transform  duration-150"
+                        enterFrom="opacity-0 translate-y-[10px]"
                         enterTo="opacity-100 translate-y-0"
-                        leave="transition-opacity duration-100"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
                     >
-                        <ComicsList data={data.results} />
+                        <h1
+                            className={
+                                'text-center font-alt text-9xl font-bold text-zinc-700'
+                            }
+                        >
+                            {' '}
+                            All comics
+                            <span className={'block text-center text-base'}>
+                                {' '}
+                                Page {currentPage}
+                            </span>
+                        </h1>
+                        <ComicsList allComicsData={allComicsData.results} />
                     </Transition>
                     <div
                         className={
@@ -66,17 +79,17 @@ const AllComics = () => {
                     >
                         <Pagination
                             label={'comics'}
-                            count={data.count}
+                            count={allComicsData.count}
                             currentPage={currentPage}
                             recordsPerPage={recordsPerPage}
                             setCurrentPage={setCurrentPage}
                         />
                     </div>
-                </>
+                </div>
             ) : (
                 <Loader message={'is loading'} />
             )}
-        </div>
+        </>
     )
 }
 export default AllComics

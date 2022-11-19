@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Transition } from '@headlessui/react'
 
 import Loader from '../../components/Loader'
@@ -9,7 +9,7 @@ const SingleComics = () => {
     const { id } = useParams()
 
     const [singleComicsData, setSingleComicsData] = useState()
-    const [charactersByComicsData, setCharactersByData] = useState()
+    //const [charactersOfComicsData, setCharactersOfComicsData] = useState()
 
     const [isFirstLoading, setIsFirstLoading] = useState(true)
     const [isShowing, setIsShowing] = useState(false)
@@ -22,15 +22,18 @@ const SingleComics = () => {
 
             try {
                 const getSingleComics = await axios.get(
-                    `${process.env.REACT_APP_API_MARVEL}/comics?id=${id}`
+                    `${process.env.REACT_APP_API_MARVEL}/singleComics/${id}`
                 )
+                console.log(getSingleComics)
 
-                const getCharactersByComicsData = await axios.get(
+                /*const getCharactersOfComic = await axios.get(
                     `${process.env.REACT_APP_API_MARVEL}/characters/${id}`
-                )
-                console.log(getCharactersByComicsData)
+                )*/
 
                 setSingleComicsData(getSingleComics.data)
+                /*
+                setCharactersOfComicsData(getCharactersOfComic.data)
+*/
 
                 setIsFirstLoading(false)
                 setIsShowing(true)
@@ -39,11 +42,11 @@ const SingleComics = () => {
             }
         }
         fetchData()
-    }, [])
+    }, [id])
     return (
         <div>
             {!isFirstLoading ? (
-                <>
+                <div>
                     <Transition
                         show={isShowing}
                         enter="transition-opacity transition-transform  duration-100"
@@ -97,7 +100,7 @@ const SingleComics = () => {
                             </p>
                         </div>
                     </Transition>
-                </>
+                </div>
             ) : (
                 <Loader message={'is loading'} />
             )}

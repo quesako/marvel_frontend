@@ -6,8 +6,8 @@ import Loader from '../../components/Loader'
 import Pagination from '../../components/Pagination'
 import CharactersList from '../../components/CharactersList'
 
-const AllCharacters = ({ favoriteList, setFavoriteList }) => {
-    const [data, setData] = useState()
+const AllCharacters = ({ setFavoritesData, favoritesData }) => {
+    const [allCharactersData, setAllCharactersData] = useState()
     const [isFirstLoading, setIsFirstLoading] = useState(true)
     const [isShowing, setIsShowing] = useState(false)
 
@@ -17,6 +17,7 @@ const AllCharacters = ({ favoriteList, setFavoriteList }) => {
     /* Fetch Api to get list of characters */
     useEffect(() => {
         const fetchData = async () => {
+            window.scrollTo(0, 0)
             /* Trigger on each paginate action */
             setIsShowing(false)
 
@@ -29,11 +30,11 @@ const AllCharacters = ({ favoriteList, setFavoriteList }) => {
             }
 
             try {
-                const getAllCharacters = await axios.get(
-                    `${process.env.REACT_APP_API_MARVEL}/characters?limit=${recordsPerPage}&skip=${skipValue}`
+                const allCharacters = await axios.get(
+                    `${process.env.REACT_APP_API_MARVEL}/allCharacters?limit=${recordsPerPage}&skip=${skipValue}`
                 )
 
-                setData(getAllCharacters.data)
+                setAllCharactersData(allCharacters.data)
 
                 setIsFirstLoading(false)
                 setIsShowing(true)
@@ -45,22 +46,33 @@ const AllCharacters = ({ favoriteList, setFavoriteList }) => {
     }, [currentPage])
 
     return (
-        <div>
+        <>
             {!isFirstLoading ? (
-                <>
+                <div className={'relative my-48 '}>
                     <Transition
+                        as="div"
+                        className={'relative'}
                         show={isShowing}
-                        enter="transition-opacity transition-transform  duration-100"
-                        enterFrom="opacity-0  translate-y-[100px]"
+                        enter="transition-opacity transition-transform  duration-150"
+                        enterFrom="opacity-0 translate-y-[10px]"
                         enterTo="opacity-100 translate-y-0"
-                        leave="transition-opacity duration-100"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
                     >
+                        <h1
+                            className={
+                                'text-center font-alt text-9xl font-bold text-zinc-700'
+                            }
+                        >
+                            {' '}
+                            All characters
+                            <span className={'block text-center text-base'}>
+                                {' '}
+                                Page {currentPage}
+                            </span>
+                        </h1>
                         <CharactersList
-                            data={data.results}
-                            favoriteList={favoriteList}
-                            setFavoriteList={setFavoriteList}
+                            allCharactersData={allCharactersData.results}
+                            favoritesData={favoritesData}
+                            setFavoritesData={setFavoritesData}
                         />
                     </Transition>
                     <div
@@ -70,17 +82,17 @@ const AllCharacters = ({ favoriteList, setFavoriteList }) => {
                     >
                         <Pagination
                             label={'characters'}
-                            count={data.count}
+                            count={allCharactersData.count}
                             currentPage={currentPage}
                             recordsPerPage={recordsPerPage}
                             setCurrentPage={setCurrentPage}
                         />
                     </div>
-                </>
+                </div>
             ) : (
                 <Loader message={'is loading'} />
             )}
-        </div>
+        </>
     )
 }
 export default AllCharacters
