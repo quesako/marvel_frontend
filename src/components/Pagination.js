@@ -11,7 +11,7 @@ const Pagination = ({
     const numberOFpages = Math.ceil(count / recordsPerPage)
     return (
         <nav
-            className="flex items-center justify-between  bg-zinc-900/70 px-4 py-3 backdrop-blur sm:px-6"
+            className="flex items-center justify-between rounded-t bg-zinc-700/90 px-4 py-3 shadow-2xl backdrop-blur sm:px-6"
             aria-label="Pagination"
         >
             <div className="hidden sm:block">
