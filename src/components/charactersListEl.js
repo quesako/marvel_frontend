@@ -19,7 +19,7 @@ const CharactersListEl = ({ character, favoritesData, setFavoritesData }) => {
         if (isElExitInFavorites) {
             setMarkedAsFavorite(true)
         }
-    }, [favoritesData])
+    }, [favoritesData, character._id, findElInFavorites])
 
     /*Toggle add/remove of favorite list*/
     const toggleFavorite = (event, id, label) => {

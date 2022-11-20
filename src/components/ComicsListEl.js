@@ -21,7 +21,7 @@ const ComicsListEl = ({ comics, favoritesData, setFavoritesData }) => {
         if (isElExitInFavorites) {
             setMarkedAsFavorite(true)
         }
-    }, [favoritesData])
+    }, [favoritesData, comics._id, findElInFavorites])
 
     /*Toggle add/remove item on favorites list*/
     const toggleFavorite = (event, id, label) => {
