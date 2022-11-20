@@ -14,10 +14,9 @@ const options = [
     { id: 2, name: 'comics', searchUrl: 'allComics' },
 ]
 const Search = ({ setOpenDialogSearch }) => {
-    // define stsates
+    // define states
     const [search, setSearch] = useState('')
     const [searchedData, setSearchedData] = useState('')
-
     const [selectedOption, setSelectedOption] = useState(options[0])
     const [displayOption, setDisplayOption] = useState()
     const [displaySearchTerm, setDisplaysearchTerm] = useState()
@@ -104,7 +103,7 @@ const Search = ({ setOpenDialogSearch }) => {
                     {({ open }) => (
                         <>
                             <div className="relative z-50">
-                                <Listbox.Button className="relative w-full cursor-default  border border-transparent bg-zinc-700 py-2 pl-3 pr-10 text-left text-white shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                <Listbox.Button className="no-focus relative w-full cursor-default  border border-transparent bg-zinc-700 py-2 pl-3 pr-10 text-left text-white shadow-sm focus:border-transparent focus:outline-none focus:ring-1 focus:ring-transparent sm:text-sm">
                                     <span className="block truncate">
                                         {selectedOption.name}
                                     </span>
@@ -122,19 +121,19 @@ const Search = ({ setOpenDialogSearch }) => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                        {options.map((person) => (
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-zinc-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                        {options.map((option) => (
                                             <Listbox.Option
-                                                key={person.id}
+                                                key={option.id}
                                                 className={({ active }) =>
                                                     clsx(
                                                         active
-                                                            ? 'bg-indigo-600 text-white'
-                                                            : 'text-gray-900',
+                                                            ? 'bg-red-600 text-white'
+                                                            : 'text-white',
                                                         'relative cursor-default select-none py-2 pl-3 pr-9'
                                                     )
                                                 }
-                                                value={person}
+                                                value={option}
                                             >
                                                 {({ selected, active }) => (
                                                     <>
@@ -146,17 +145,14 @@ const Search = ({ setOpenDialogSearch }) => {
                                                                 'block truncate'
                                                             )}
                                                         >
-                                                            {person.name}
+                                                            {option.name}
                                                         </span>
 
                                                         {selected ? (
                                                             <span
-                                                                className={clsx(
-                                                                    active
-                                                                        ? 'text-white'
-                                                                        : 'text-indigo-600',
-                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                )}
+                                                                className={
+                                                                    'absolute inset-y-0 right-0 flex items-center pr-4 text-white'
+                                                                }
                                                             >
                                                                 <CheckIcon
                                                                     className="h-5 w-5"

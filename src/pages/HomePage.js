@@ -29,12 +29,16 @@ const HomePage = () => {
                     <p className={'text-zinc-600'}>
                         2. Secure undefined data on single pages
                     </p>
+                    <p>
+                        Paginate the search result (display only the 1000 first
+                        results)
+                    </p>
                     <p className={'text-zinc-600'}>
                         3. Refactoring to suppress duplicate code
                     </p>
                     <p className={'text-zinc-600'}>
-                        4. Make navigable comics list of character on character
-                        single page.
+                        4. Allow the navigation since the characters single page
+                        to the related comics
                     </p>
                 </div>
             </div>
