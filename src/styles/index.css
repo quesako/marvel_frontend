@@ -10,23 +10,26 @@
     }
 
     /*background colors*/
-    .bg-body{
+    .bg-body {
         @apply bg-zinc-100
     }
-    .bg-body-inverted{
+
+    .bg-body-inverted {
         @apply bg-zinc-800
     }
 
     /*text colors*/
-    .color-body{
+    .color-body {
         @apply text-zinc-600
 
     }
-    .color-body-inverted{
+
+    .color-body-inverted {
         @apply text-white
 
     }
-    .color-accent{
+
+    .color-accent {
         @apply text-red-500
 
     }
@@ -68,5 +71,14 @@
         @apply text-teal-700;
         @apply bg-transparent;
         @apply border border-teal-700
+    }
+
+    /*
+    input
+    */
+    .no-focus {
+        @apply focus:border-transparent;
+        @apply focus:outline-none;
+        @apply focus:ring-0;
     }
 }

@@ -1,60 +1,72 @@
-import {Link} from "react-router-dom";
-import {StarIcon} from "@heroicons/react/24/solid";
-import {useEffect, useState} from "react";
-import clsx from "clsx";
-import Cookies from "js-cookie";
+import { Link } from 'react-router-dom'
+import { StarIcon } from '@heroicons/react/24/solid'
+import { useEffect, useState } from 'react'
+import clsx from 'clsx'
+import Cookies from 'js-cookie'
 
-const CharactersListEl =({character, favoritesData, setFavoritesData}) =>{
+const CharactersListEl = ({ character, favoritesData, setFavoritesData }) => {
     /* Define a state for characters el to */
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [markedAsFavorite, setMarkedAsFavorite] = useState(false)
 
-    /*util to check if el is in favorite*/
-    const findElInFavorites = (id) =>{
-        return favoritesData.find((item) => item.includes(id))
+    /* util to check if el is in favorite*/
+    const findElInFavorites = (key, id) => {
+        return favoritesData[key].find((item) => item.id.includes(id))
     }
-
+    const targetKey = 'characters'
     /* Check if item exist in the favorites*/
     useEffect(() => {
-        const isElExitInFavorites = findElInFavorites(character._id)
-        if(isElExitInFavorites){
-            setIsFavorite(true)
+        const isElExitInFavorites = findElInFavorites(targetKey, character._id)
+        if (isElExitInFavorites) {
+            setMarkedAsFavorite(true)
         }
-    },[favoritesData])
+    }, [favoritesData])
 
     /*Toggle add/remove of favorite list*/
-    const toggleFavorite = (event, id) => {
+    const toggleFavorite = (event, id, label) => {
         event.preventDefault()
-        const isElExitInFavorites = findElInFavorites(id)
-        const newFavoriteList = [...favoritesData]
-        if(!isElExitInFavorites){
-            newFavoriteList.push(id)
-            setIsFavorite(true)
-        }else{
-            const index = newFavoriteList.findIndex((element) => element === id)
-            newFavoriteList.splice(newFavoriteList.indexOf(newFavoriteList[index]), 1);
-            setIsFavorite(false)
+        const isElExitInFavorites = findElInFavorites(targetKey, id)
+        const newFavoriteList = { ...favoritesData }
+
+        if (!isElExitInFavorites) {
+            newFavoriteList[targetKey].push({
+                id: id,
+                label: label,
+            })
+            setMarkedAsFavorite(true)
+        } else {
+            const index = newFavoriteList[targetKey].findIndex(
+                (element) => element.id === id
+            )
+            newFavoriteList[targetKey].splice(
+                newFavoriteList[targetKey].indexOf(
+                    newFavoriteList[targetKey][index]
+                ),
+                1
+            )
+            setMarkedAsFavorite(false)
         }
         setFavoritesData(newFavoriteList)
         Cookies.set('marvel_favorites', JSON.stringify(newFavoriteList))
     }
     return (
-        <div
-
-            className={'relative'}
-            data-id={character._id}
-        >
+        <div className={'relative'} data-id={character._id}>
             <Link
                 to={`/characters/${character._id}`}
                 className={'group relative z-20 block'}
             >
                 <div className={''}>
                     {/*overlay*/}
-                    <div className={clsx('absolute top-0 z-20 aspect-1 h-full w-full rounded-full bg-gradient-to-b from-zinc-900/40 via-zinc-800/30 to-zinc-800/70 transition-all opacity-90 group-hover:opacity-80 ')}></div>
+                    <div
+                        className={clsx(
+                            'absolute top-0 z-20 aspect-1 h-full w-full rounded-full bg-gradient-to-b from-zinc-900/40 via-zinc-800/30 to-zinc-800/70 opacity-90 transition-all group-hover:opacity-80 '
+                        )}
+                    ></div>
                     {/*image*/}
                     <img
-                        className={clsx( 'relative z-10 aspect-1 w-full rounded-full bg-red-600 object-cover object-center transition-all',isFavorite ? 'opacity-90 ':'opacity-40 ')
-
-                        }
+                        className={clsx(
+                            'relative z-10 aspect-1 w-full rounded-full bg-red-600 object-cover object-center transition-all',
+                            markedAsFavorite ? 'opacity-90 ' : 'opacity-40 '
+                        )}
                         src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
                         alt={'toto'}
                     />
@@ -73,7 +85,9 @@ const CharactersListEl =({character, favoritesData, setFavoritesData}) =>{
                         >
                             {character.name}
                         </h2>
-                        <p className={'text-xs text-white/20 text-center'}>{character._id}</p>
+                        <p className={'text-center text-xs text-white/20'}>
+                            {character._id}
+                        </p>
                     </div>
                 </div>
             </Link>
@@ -84,13 +98,12 @@ const CharactersListEl =({character, favoritesData, setFavoritesData}) =>{
             >
                 <button
                     onClick={(ev) => {
-                        toggleFavorite(ev, character._id)
+                        toggleFavorite(ev, character._id, character.name)
                     }}
                     className={clsx(
                         'btn group flex h-6 w-6 items-center justify-center rounded-full  p-1',
-                            isFavorite ? (' bg-red-500'):('bg-zinc-800')
+                        markedAsFavorite ? ' bg-red-500' : 'bg-zinc-800'
                     )}
-
                 >
                     <StarIcon
                         className={'h-3 w-3  text-xs text-white'}

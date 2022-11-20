@@ -4,10 +4,9 @@ import { useParams } from 'react-router-dom'
 import { Transition } from '@headlessui/react'
 
 import Loader from '../../components/Loader'
-import CharactersList from "../../components/CharactersList";
-import ComicsList from "../../components/ComicsList";
+import ComicsList from '../../components/ComicsList'
 
-const SingleCharacter = ({ favoritesData,setFavoritesData}) => {
+const SingleCharacter = ({ favoritesData, setFavoritesData }) => {
     const { id } = useParams()
 
     const [singleCharacterData, setSingleCharacterData] = useState()
@@ -40,7 +39,6 @@ const SingleCharacter = ({ favoritesData,setFavoritesData}) => {
             } catch (error) {
                 console.log(error.response)
             }
-
         }
         fetchData()
     }, [id])
@@ -101,13 +99,12 @@ const SingleCharacter = ({ favoritesData,setFavoritesData}) => {
                             </p>
                         </div>
                         <div className={'mx-auto mt-24  max-w-4xl px-4'}>
-                        <ComicsList
-                            allComicsData={comicsOfCharacterData.comics  }
-                            favoritesData={favoritesData}
-                            setFavoritesData={setFavoritesData}
-                       />
+                            <ComicsList
+                                allComicsData={comicsOfCharacterData.comics}
+                                favoritesData={favoritesData}
+                                setFavoritesData={setFavoritesData}
+                            />
                         </div>
-
                     </Transition>
                 </>
             ) : (

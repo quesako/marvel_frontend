@@ -21,18 +21,10 @@ const Pagination = ({
                     </span>
                     <span className="font-medium">{currentPage}</span> /{' '}
                     <span className="font-medium">{numberOFpages}</span> pages
-                    {/*<span className="font-medium">
-                        {(currentPage - 1) * recordsPerPage + 1}
-                    </span>{' '}
-                    -{' '}
-                    <span className="font-medium">
-                        {currentPage * recordsPerPage}
-                    </span>{' '}
-                    / <span className="font-medium">{count}</span> résultats*/}
                 </p>
             </div>
             <div className="flex flex-1 items-center justify-between sm:justify-end">
-                {/* Desactivate button if user is on first page*/}
+                {/* Deactivate the prev button on the first page*/}
                 <button
                     onClick={() => {
                         if (currentPage !== 1) setCurrentPage(currentPage - 1)
@@ -47,7 +39,7 @@ const Pagination = ({
                 <span
                     className={'block h-full w-[1px] min-w-[1px] bg-white'}
                 ></span>
-                {/* Desactivate button if user is on the last page*/}
+                {/* Deactivate the next button on the last page*/}
                 <button
                     onClick={() => {
                         if (currentPage !== numberOFpages)

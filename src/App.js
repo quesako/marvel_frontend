@@ -6,24 +6,27 @@ import SingleCharacter from './pages/characters/SingleCharacters'
 import SingleComics from './pages/comics/SingleComics'
 import AllCharacters from './pages/characters/AllCharacters'
 import AllComics from './pages/comics/AllComic'
-import Search from './pages/Search'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 
 function App() {
-    /*FavoriteList*/
+    /*Favorites*/
+    const [favoritesData, setFavoritesData] = useState({
+        characters: [],
+        comics: [],
+    })
 
-    const [favoriteList, setFavoriteList] = useState([])
-    /*
-    const intilialFavoriteList = Cookies.get('favoriteList') || [null]
+    useEffect(() => {
+        const intilialFavoriteList = Cookies.get('marvel_favorites') || [null]
 
-    if (intilialFavoriteList[0] !== null) {
-        setFavoriteList(JSON.parse(intilialFavoriteList))
-    }*/
+        if (intilialFavoriteList[0] !== null) {
+            setFavoritesData(JSON.parse(intilialFavoriteList))
+        }
+    }, [])
 
     return (
         <Router>
-            <TopBar />
+            <TopBar favoritesData={favoritesData} />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 {/*characters*/}
@@ -31,17 +34,39 @@ function App() {
                     path="/characters"
                     element={
                         <AllCharacters
-                            favoriteList={favoriteList}
-                            setFavoriteList={setFavoriteList}
+                            favoritesData={favoritesData}
+                            setFavoritesData={setFavoritesData}
                         />
                     }
                 />
-                <Route path="/characters/:id" element={<SingleCharacter />} />
+                <Route
+                    path="/characters/:id"
+                    element={
+                        <SingleCharacter
+                            favoritesData={favoritesData}
+                            setFavoritesData={setFavoritesData}
+                        />
+                    }
+                />
                 {/*comics*/}
-                <Route path="/comics" element={<AllComics />} />
-                <Route path="/comics/:id" element={<SingleComics />} />
-                {/*search*/}
-                <Route path="/search" element={<Search />} />
+                <Route
+                    path="/comics"
+                    element={
+                        <AllComics
+                            favoritesData={favoritesData}
+                            setFavoritesData={setFavoritesData}
+                        />
+                    }
+                />
+                <Route
+                    path="/comics/:id"
+                    element={
+                        <SingleComics
+                            favoritesData={favoritesData}
+                            setFavoritesData={setFavoritesData}
+                        />
+                    }
+                />
             </Routes>
         </Router>
     )

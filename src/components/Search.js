@@ -13,13 +13,18 @@ const options = [
     { id: 1, name: 'characters', searchUrl: 'allCharacters' },
     { id: 2, name: 'comics', searchUrl: 'allComics' },
 ]
-const Search = ({ setOpen }) => {
+const Search = ({ setOpenDialogSearch }) => {
     // define stsates
     const [search, setSearch] = useState('')
     const [searchedData, setSearchedData] = useState('')
+
     const [selectedOption, setSelectedOption] = useState(options[0])
     const [displayOption, setDisplayOption] = useState()
+    const [displaySearchTerm, setDisplaysearchTerm] = useState()
     const [isDataLoading, setIsDataLoading] = useState(true)
+    const [messageSearch, setMessageSearch] = useState(
+        'Please type a term in the serach bar...'
+    )
 
     const navigate = useNavigate()
 
@@ -35,15 +40,19 @@ const Search = ({ setOpen }) => {
         const fetchData = async () => {
             if (search !== '') {
                 try {
-                    const searchedCharacters = await axios.get(
+                    const searchedTerm = await axios.get(
                         `${process.env.REACT_APP_API_MARVEL}/${
                             selectedOption.searchUrl
                         }?term=${encodeURI(search)}`
                     )
-                    console.log(searchedCharacters.data)
-                    setSearchedData(searchedCharacters.data)
+
+                    setSearchedData(searchedTerm.data)
+                    if (searchedData.count === 0) {
+                        setMessageSearch('No result for this term.')
+                    }
                     setIsDataLoading(false)
                     setDisplayOption(selectedOption.name)
+                    setDisplaysearchTerm(search)
                 } catch (error) {
                     console.log(error.response) // contrairement au error.message d'express
                 }
@@ -55,7 +64,7 @@ const Search = ({ setOpen }) => {
     // Close modal and redirect
     const handleClick = (event, selectedOption, id) => {
         event.preventDefault()
-        setOpen(false) // toggle open state in React state
+        setOpenDialogSearch(false) // toggle open state in React state
         navigate(`/${selectedOption}/${id}`)
     }
 
@@ -82,7 +91,7 @@ const Search = ({ setOpen }) => {
                         type="search"
                         name="search"
                         id="search"
-                        className="focus:ring-none color-body-inverted block w-full w-full border-transparent  bg-transparent p-1 text-sm focus:border-none focus:border-none focus:outline-none "
+                        className="color-body-inverted no-focus block w-full w-full  border-transparent bg-transparent p-1 text-sm"
                         placeholder={
                             selectedOption.name === 'comics'
                                 ? 'write a comics title...'
@@ -177,11 +186,11 @@ const Search = ({ setOpen }) => {
                     <div className="h-[50vh] flex-1 scroll-py-2 overflow-y-auto p-12 transition-all">
                         <h1
                             className={
-                                'border-b border-zinc-700 py-2 pb-4 font-alt text-xl text-zinc-700'
+                                'border-b border-zinc-700 py-2 pb-4 text-center font-alt text-xl text-white'
                             }
                         >
-                            Found {searchedData.count} results for "{search}" in{' '}
-                            {displayOption}
+                            Found {searchedData.count} results for "
+                            {displaySearchTerm}" in {displayOption}
                         </h1>
                         <div
                             className={
@@ -193,7 +202,7 @@ const Search = ({ setOpen }) => {
                                     'grid w-full divide-y divide-zinc-700 py-2'
                                 }
                             >
-                                {searchedData.results ? (
+                                {searchedData.count !== 0 ? (
                                     <>
                                         {searchedData.results.map(
                                             (item, index) => {
@@ -241,7 +250,9 @@ const Search = ({ setOpen }) => {
                                         )}
                                     </>
                                 ) : (
-                                    <p>Not found</p>
+                                    <p className={'text-center text-zinc-700'}>
+                                        {messageSearch}
+                                    </p>
                                 )}
                             </div>
                         </div>

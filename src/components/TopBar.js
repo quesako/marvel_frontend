@@ -1,15 +1,30 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { StarIcon } from '@heroicons/react/24/solid'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import {
+    ArrowRightIcon,
+    MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Search from './Search'
 
 const TopBar = ({ favoritesData }) => {
-    const [open, setOpen] = useState(false)
+    // define states
+    const [openDialogSearch, setOpenDialogSearch] = useState(false)
+    const [openDialogFavorites, setOpenDialogFavorites] = useState(false)
+
+    const navigate = useNavigate()
+
+    // Close modal and redirect to
+    const handleClick = (event, path, id) => {
+        event.preventDefault()
+        setOpenDialogFavorites(false)
+        navigate(`/${path}/${id}`)
+    }
 
     return (
         <>
+            {/*navigation*/}
             <div className={'fixed top-0 z-50 w-full'}>
                 <div className={'bg-body-inverted border-b border-zinc-700'}>
                     <div className={'container flex'}>
@@ -27,7 +42,7 @@ const TopBar = ({ favoritesData }) => {
                                 <div
                                     className={' border-zinc-700 px-4  text-xs'}
                                 >
-                                    Build for le reacteur
+                                    Build for "le reacteur"
                                 </div>
                             </div>
                         </div>
@@ -60,30 +75,31 @@ const TopBar = ({ favoritesData }) => {
                             </svg>
                         </Link>
                         {/*right nav*/}
-
                         <div className={'flex flex-1 items-center justify-end'}>
                             <button
                                 className={'btn justify-end text-right'}
                                 onClick={() => {
-                                    setOpen(true)
+                                    setOpenDialogSearch(true)
                                 }}
                             >
                                 <MagnifyingGlassIcon
                                     className={'h-4 w-4 text-white'}
                                 ></MagnifyingGlassIcon>
                             </button>
-                            <Link
-                                to={`/my-favorites`}
+                            <button
                                 className={
-                                    'color-body-inverted flex h-[3.25rem] justify-end'
+                                    'btn color-body-inverted flex h-[3.25rem] justify-end justify-end text-right'
                                 }
+                                onClick={() => {
+                                    setOpenDialogFavorites(true)
+                                }}
                             >
-                                <div
+                                <span
                                     className={
                                         ' flex h-full items-center border-r border-l border-zinc-700'
                                     }
                                 >
-                                    <div
+                                    <span
                                         className={
                                             'flex items-center border-zinc-700  px-4 font-alt text-xs'
                                         }
@@ -98,12 +114,14 @@ const TopBar = ({ favoritesData }) => {
                                             />
                                         </span>
                                         <span>
-                                            My favorites ({favoritesData.length}
+                                            My favorites (
+                                            {favoritesData.characters.length +
+                                                favoritesData.comics.length}
                                             )
                                         </span>
-                                    </div>
-                                </div>
-                            </Link>
+                                    </span>
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -158,8 +176,13 @@ const TopBar = ({ favoritesData }) => {
                 </div>
             </div>
 
-            <Transition.Root show={open} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={setOpen}>
+            {/*dialog serach*/}
+            <Transition.Root show={openDialogSearch} as={Fragment}>
+                <Dialog
+                    as="div"
+                    className="relative z-50"
+                    onClose={setOpenDialogSearch}
+                >
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -184,7 +207,213 @@ const TopBar = ({ favoritesData }) => {
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <Dialog.Panel className="relative w-full transform  rounded-lg bg-zinc-800 text-left shadow-xl transition-all sm:max-w-lg ">
-                                    <Search setOpen={setOpen}></Search>
+                                    <Search
+                                        setOpenDialogSearch={
+                                            setOpenDialogSearch
+                                        }
+                                    ></Search>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
+            {/*favorites search*/}
+            <Transition.Root show={openDialogFavorites} as={Fragment}>
+                <Dialog
+                    as="div"
+                    className="relative z-50"
+                    onClose={setOpenDialogFavorites}
+                >
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-zinc-900 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-10 ">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative w-full transform  rounded-lg bg-zinc-800 text-left shadow-xl transition-all sm:max-w-lg ">
+                                    <div
+                                        className={
+                                            'mx-auto flex items-center  border border-zinc-700  bg-zinc-700 py-2 py-2'
+                                        }
+                                    >
+                                        <span className={'ml-2 text-white '}>
+                                            My favorites
+                                        </span>
+                                    </div>
+                                    <div className="h-[50vh] flex-1 scroll-py-2 overflow-y-auto p-12 transition-all">
+                                        <div
+                                            className={
+                                                'mx-auto flex max-w-3xl items-center border-b border-zinc-700 py-2'
+                                            }
+                                        >
+                                            <div
+                                                className={
+                                                    'grid w-full divide-y divide-zinc-700 py-2'
+                                                }
+                                            >
+                                                {favoritesData.characters.map(
+                                                    (favoriteItem, index) => {
+                                                        return (
+                                                            <button
+                                                                onClick={(
+                                                                    event
+                                                                ) => {
+                                                                    handleClick(
+                                                                        event,
+                                                                        'comics',
+                                                                        favoriteItem
+                                                                    )
+                                                                }}
+                                                                className={
+                                                                    ' btn no-focus flex w-full items-center justify-between truncate py-4'
+                                                                }
+                                                                key={index}
+                                                            >
+                                                                <span
+                                                                    className={
+                                                                        'mr-4 truncate text-left'
+                                                                    }
+                                                                >
+                                                                    <span
+                                                                        className={
+                                                                            'block truncate text-left font-alt  text-lg text-white'
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            favoriteItem.label
+                                                                        }
+                                                                    </span>
+                                                                    <span
+                                                                        className={
+                                                                            'truncate text-sm text-zinc-700'
+                                                                        }
+                                                                    >
+                                                                        <span>
+                                                                            Character
+                                                                        </span>
+
+                                                                        <span
+                                                                            className={
+                                                                                'mx-2'
+                                                                            }
+                                                                        >
+                                                                            -
+                                                                        </span>
+                                                                        <span>
+                                                                            {
+                                                                                favoriteItem.id
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+
+                                                                <ArrowRightIcon
+                                                                    className={
+                                                                        'h-4 w-4  text-white'
+                                                                    }
+                                                                ></ArrowRightIcon>
+                                                            </button>
+                                                        )
+                                                    }
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div
+                                            className={
+                                                'mx-auto flex max-w-3xl items-center border-b border-zinc-700 py-2'
+                                            }
+                                        >
+                                            <div
+                                                className={
+                                                    'grid w-full divide-y divide-zinc-700 py-2'
+                                                }
+                                            >
+                                                {favoritesData.comics.map(
+                                                    (favoriteItem, index) => {
+                                                        return (
+                                                            <button
+                                                                onClick={(
+                                                                    event
+                                                                ) => {
+                                                                    handleClick(
+                                                                        event,
+                                                                        'comics',
+                                                                        favoriteItem
+                                                                    )
+                                                                }}
+                                                                className={
+                                                                    ' btn no-focus flex w-full items-center justify-between truncate py-4'
+                                                                }
+                                                                key={index}
+                                                            >
+                                                                <span
+                                                                    className={
+                                                                        'mr-4 truncate text-left'
+                                                                    }
+                                                                >
+                                                                    <span
+                                                                        className={
+                                                                            'block truncate text-left font-alt  text-lg text-white'
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            favoriteItem.label
+                                                                        }
+                                                                    </span>
+                                                                    <span
+                                                                        className={
+                                                                            'truncate text-sm text-zinc-700'
+                                                                        }
+                                                                    >
+                                                                        <span>
+                                                                            Comics
+                                                                        </span>
+
+                                                                        <span
+                                                                            className={
+                                                                                'mx-2'
+                                                                            }
+                                                                        >
+                                                                            -
+                                                                        </span>
+                                                                        <span>
+                                                                            {
+                                                                                favoriteItem.id
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+
+                                                                <ArrowRightIcon
+                                                                    className={
+                                                                        'h-4 w-4  text-white'
+                                                                    }
+                                                                ></ArrowRightIcon>
+                                                            </button>
+                                                        )
+                                                    }
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

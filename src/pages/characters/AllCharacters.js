@@ -9,35 +9,36 @@ import CharactersList from '../../components/CharactersList'
 const AllCharacters = ({ setFavoritesData, favoritesData }) => {
     const [allCharactersData, setAllCharactersData] = useState()
     const [isFirstLoading, setIsFirstLoading] = useState(true)
-    const [isShowing, setIsShowing] = useState(false)
+    const [isPaginatedLoading, setIsPaginatedLoading] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(1)
     const recordsPerPage = 100
 
     /* Fetch Api to get list of characters */
     useEffect(() => {
+        /* Trigger on each paginate action */
+        setIsPaginatedLoading(false)
+
+        /* force scroll top*/
+        window.scrollTo(0, 0)
+
+        /*Build the paginates query */
+        let skipValue
+        if (currentPage === 1) {
+            skipValue = 0
+        } else {
+            skipValue = currentPage * 10
+        }
+
         const fetchData = async () => {
-            window.scrollTo(0, 0)
-            /* Trigger on each paginate action */
-            setIsShowing(false)
-
-            /*Build the paginates query */
-            let skipValue
-            if (currentPage === 1) {
-                skipValue = 0
-            } else {
-                skipValue = currentPage * 10
-            }
-
             try {
                 const allCharacters = await axios.get(
                     `${process.env.REACT_APP_API_MARVEL}/allCharacters?limit=${recordsPerPage}&skip=${skipValue}`
                 )
 
                 setAllCharactersData(allCharacters.data)
-
                 setIsFirstLoading(false)
-                setIsShowing(true)
+                setIsPaginatedLoading(true)
             } catch (error) {
                 console.log(error.response)
             }
@@ -46,13 +47,13 @@ const AllCharacters = ({ setFavoritesData, favoritesData }) => {
     }, [currentPage])
 
     return (
-        <>
+        <div className={'relative h-full min-h-screen w-full'}>
             {!isFirstLoading ? (
-                <div className={'relative my-48 '}>
+                <div className={'relative my-48 w-full'}>
                     <Transition
                         as="div"
                         className={'relative'}
-                        show={isShowing}
+                        show={isPaginatedLoading}
                         enter="transition-opacity transition-transform  duration-150"
                         enterFrom="opacity-0 translate-y-[10px]"
                         enterTo="opacity-100 translate-y-0"
@@ -62,7 +63,6 @@ const AllCharacters = ({ setFavoritesData, favoritesData }) => {
                                 'text-center font-alt text-9xl font-bold text-zinc-700'
                             }
                         >
-                            {' '}
                             All characters
                             <span className={'block text-center text-base'}>
                                 {' '}
@@ -90,9 +90,9 @@ const AllCharacters = ({ setFavoritesData, favoritesData }) => {
                     </div>
                 </div>
             ) : (
-                <Loader message={'is loading'} />
+                <Loader message={'Loading...'} />
             )}
-        </>
+        </div>
     )
 }
 export default AllCharacters

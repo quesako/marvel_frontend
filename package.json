@@ -17,10 +17,12 @@
     "js-cookie": "^3.0.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "react": "^18.2.0",
+    "react-content-loader": "^6.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
-    "use-debounce": "^8.0.4"
+    "use-debounce": "^8.0.4",
+    "use-local-storage-state": "^18.1.1"
   },
   "scripts": {
     "start": "env-cmd -f .env react-scripts start",

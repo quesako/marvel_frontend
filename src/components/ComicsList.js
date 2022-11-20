@@ -1,6 +1,6 @@
 import ComicsListEl from './ComicsListEl'
 
-const ComicsList = ({ allComicsData }) => {
+const ComicsList = ({ allComicsData, favoritesData, setFavoritesData }) => {
     return (
         <div
             className={
@@ -8,7 +8,14 @@ const ComicsList = ({ allComicsData }) => {
             }
         >
             {allComicsData.map((comics) => {
-                return <ComicsListEl key={comics._id} comics={comics} />
+                return (
+                    <ComicsListEl
+                        key={comics._id}
+                        comics={comics}
+                        favoritesData={favoritesData}
+                        setFavoritesData={setFavoritesData}
+                    />
+                )
             })}
         </div>
     )
