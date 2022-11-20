@@ -6,7 +6,7 @@ const HomePage = () => {
                     'mx-auto mt-48 max-w-4xl  px-4 text-center font-alt text-white'
                 }
             >
-                <h1 className={'text-6xl font-bold'}> Welcome,</h1>
+                <h1 className={'text-6xl font-bold'}> Welcome 👋,</h1>
 
                 <p className={'text-xl'}>
                     This website is not an official "Disney" website but a work

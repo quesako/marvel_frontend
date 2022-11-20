@@ -21,7 +21,7 @@ const ComicsListEl = ({ comics, favoritesData, setFavoritesData }) => {
             setMarkedAsFavorite(true)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [favoritesData, comics._id, findElInFavorites])
+    }, [favoritesData])
 
     /*Toggle add/remove item on favorites list*/
     const toggleFavorite = (event, id, label) => {
