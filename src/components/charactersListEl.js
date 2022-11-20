@@ -19,7 +19,8 @@ const CharactersListEl = ({ character, favoritesData, setFavoritesData }) => {
         if (isElExitInFavorites) {
             setMarkedAsFavorite(true)
         }
-    }, [favoritesData, character._id, findElInFavorites])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [favoritesData])
 
     /*Toggle add/remove of favorite list*/
     const toggleFavorite = (event, id, label) => {

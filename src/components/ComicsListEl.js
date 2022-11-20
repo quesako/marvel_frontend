@@ -17,10 +17,10 @@ const ComicsListEl = ({ comics, favoritesData, setFavoritesData }) => {
     /* Check if item exist in the favorites*/
     useEffect(() => {
         const isElExitInFavorites = findElInFavorites(targetKey, comics._id)
-        console.log(isElExitInFavorites)
         if (isElExitInFavorites) {
             setMarkedAsFavorite(true)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [favoritesData, comics._id, findElInFavorites])
 
     /*Toggle add/remove item on favorites list*/
